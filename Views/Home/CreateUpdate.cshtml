@@ -1,0 +1,61 @@
+﻿@model CharacterClass
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        form{
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    @{
+        string title = string.IsNullOrEmpty(Model.Name) ? "Создание" : "Изменение";
+    }
+    <h2>@title</h2>
+    <div class="cu-container">
+        <div>
+            @using (Html.BeginForm("CreateUpdate"))
+            {
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+                @Html.ValidationMessageFor(m => m.Name)
+
+                @Html.LabelFor(m => m.Strength)
+                @Html.TextBoxFor(m => m.Strength)
+                @Html.ValidationMessageFor(m => m.Strength)
+
+                @Html.LabelFor(m => m.Agility)
+                @Html.TextBoxFor(m => m.Agility)
+                @Html.ValidationMessageFor(m => m.Agility)
+
+                @Html.LabelFor(m => m.Intelligence)
+                @Html.TextBoxFor(m => m.Intelligence)
+                @Html.ValidationMessageFor(m => m.Intelligence)
+
+                <input type="submit" value="@title" />
+            }
+        </div>
+    </div>
+</body>
+</html>

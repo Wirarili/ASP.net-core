@@ -1,0 +1,97 @@
+﻿@model List<Character>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .button-filter {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="character-container">
+        <h2>Список персонажей</h2>
+        <form asp-action="characterList" method="get" class="form-filter">
+            <div class="form-filter-container">
+                <label for="name">Фильтр по названию:</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Введите название персонажа" />
+
+                <label for="class">Фильтр по классу:</label>
+                <input type="text" list="classList" id="class" name="className" class="form-control" placeholder="Введите название класса" />
+                <datalist id="classList">
+                    @{
+                        @foreach (var classItem in ViewBag.Classes)
+                        {
+                            <option value="@classItem.Name">@classItem.Name</option>
+                        }
+                    }
+                </datalist>
+            </div>
+            <button type="submit" class="button-filter">Фильтровать</button>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Класс</th>
+                    <th>Уровень</th>
+                    <th>Фракция</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    
+                    foreach (var @item in Model)
+                    {
+                        <tr id="row-@item.Id">
+                            <td>@item.Name</td>
+                            <td>@item.CharacterClass.Name</td>
+                            <td>@item.Level</td>
+                            <td>@item.Fraction</td>
+                            <td>
+                                <button class="button-delete" data-id="@item.Id">Удалить</button>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("CreateUpdateCharacter",item)">Изменить</a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("CharacterHistoryList",item)">История</a>
+                            </td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+        <a href="@Url.Action("CreateUpdateCharacter",0)">Добавить</a>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.button-delete').click(function (event) {
+                event.preventDefault();
+                var button = $(this);
+                var id = button.data('id');
+
+                $.ajax({
+                    url: '@Url.Action("DeleteCharacter")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (response) {
+                        $('#row-' + id).remove();
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+﻿@model List<CharacterClass>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .button-filter {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="class-container">
+    <h2 >Список классов</h2>
+        <form asp-action="ClassesList" method="get" class="form-filter">
+            <div class="form-filter-container">
+                <label for="name">Фильтр по названию:</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Введите название класса" />
+            </div>
+            <button type="submit" class="button-filter">Фильтровать</button>
+        </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Сила</th>
+                <th>Ловкость</th>
+                <th>Интеллект</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+                @{
+                    foreach (var @item in Model)
+                    {
+                        <tr id="row-@item.Id">
+                            <td>@item.Name</td>
+                            <td>@item.Strength</td>
+                            <td>@item.Agility</td>
+                            <td>@item.Intelligence</td>
+                            <td>
+                                <button class="button-delete" data-id="@item.Id">Удалить</button>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("CreateUpdate",item)">Изменить</a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("ClassHistoryList",item)">История</a>
+                            </td>
+                        </tr>
+                    }
+                    
+                }
+        </tbody>
+    </table>
+    <a href="@Url.Action("CreateUpdate",0)">Добавить</a>
+</div>
+
+    <script>
+        $(document).ready(function () {
+            $('.button-delete').click(function (event) {
+                event.preventDefault();
+                var button = $(this);
+                var id = button.data('id');
+
+                $.ajax({
+                    url: '@Url.Action("DeleteClass")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (response) {
+                        $('#row-' + id).remove();
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

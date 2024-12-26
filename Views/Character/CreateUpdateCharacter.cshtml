@@ -1,0 +1,61 @@
+﻿@model CharacterEditModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        form  {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    @{
+        string title = Model.Id == 0 ? "Создание" : "Изменение";
+    }
+    <h2>@title</h2>
+    <div class="cu-container">
+        <div>
+            @using (Html.BeginForm("CreateUpdateCharacter"))
+            {
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+                @Html.ValidationMessageFor(m => m.Name)
+
+                @Html.LabelFor(m => m.ClassId, "Класс")
+                @Html.DropDownListFor(m => m.ClassId, new SelectList(ViewBag.Classes, "Id", "Name"), "Выберите класс")
+                @Html.ValidationMessageFor(m => m.ClassId)
+
+                @Html.LabelFor(m => m.Level)
+                @Html.TextBoxFor(m => m.Level)
+                @Html.ValidationMessageFor(m => m.Level)
+
+                @Html.LabelFor(m => m.Fraction)
+                @Html.TextBoxFor(m => m.Fraction)
+                @Html.ValidationMessageFor(m => m.Fraction)
+
+                <input type="submit" value="@title" class="btn btn-primary" />
+            }
+        </div>
+    </div>
+</body>
+</html>

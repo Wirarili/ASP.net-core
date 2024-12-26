@@ -1,0 +1,87 @@
+﻿@model List<CharacterClassHistory>
+
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta charset="UTF-8">
+
+        <style>
+            th, td {
+                border: 1px solid black;
+                padding: 12px; 
+                text-align: left;
+            }
+            .class-table {
+                margin-top: 20px;
+            }
+
+        .button-filter {
+            margin-top: 10px;
+        }
+        </style>
+	</head>
+	<body>
+	    <h2>История изменения класса: @ViewBag.Name</h2>
+
+        <form asp-action="ClassHistoryList" method="get">
+            <div>
+                <input type="hidden" name="id" value="@ViewBag.Id" />
+                <label>
+                    Фильтр действия
+                    <input list="action-in" type="text" name="act" placeholder="Введите действие" />
+                    <datalist id="action-in">
+                        <option value="Add"></option>
+                        <option value="Delete"></option>
+                        <option value="Change"></option>
+                    </datalist>
+                </label>
+
+                <label>
+                    Фильтр даты
+                    <input type="date" name="date" placeholder="Выберите дату" />
+                </label>
+
+                <label>
+                    Фильтр поля
+                    <input list="property" type="text" name="property" placeholder="Введите поле" />
+                    <datalist id="property">
+                        @{
+                            foreach (var item in ViewBag.Propertes)
+                            {
+                                <option value="@item"></option>
+                            }
+                        }
+                    </datalist>
+                </label>
+
+                <button type="submit" class="button-filter">Фильтровать</button>
+            </div>
+        </form>
+
+        <table class="class-table">
+            <thead>
+                <tr>
+                    <th>Действие</th>
+                    <th>Поле</th>
+                    <th>Старое знач</th>
+                    <th>Новое знач</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var @item in Model)
+                    {
+                        <tr id="row-@item.Id">
+                            <td>@item.Action</td>
+                            <td>@item.PropertyName</td>
+                            <td>@item.OldValue</td>
+                            <td>@item.NewValue</td>
+                            <td>@item.Date.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+	    </table>
+	</body>
+</html>
